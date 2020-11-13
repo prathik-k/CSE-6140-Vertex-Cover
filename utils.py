@@ -1,12 +1,14 @@
 import networkx as nx
+from collections import deque
 
-def createGraph(fname,path="/DATA"):
-    G = nx.read_adjlist(fname,create_using = nx.MultiGraph(),nodetype=int)
-    with open(path+fname) as f:
-        first_line = f.readline().split()
-    G.remove_edges_from([(int(first_line[0]),int(first_line[1])),(int(first_line[0]),int(first_line[2]))])
-    G = gt.read_graph_from_csv(fname+path,directed=False,skip_first=False)
+def createGraph(fname):
+
+    with open(fname) as f:
+        next(f)
+        lines = f.read().splitlines()
+    G = nx.parse_adjlist(lines,create_using = nx.MultiGraph(),nodetype=str)     
     return G
+
 
     
 
