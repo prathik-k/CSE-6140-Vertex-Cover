@@ -8,13 +8,19 @@ from collections import deque
 def isValidVC(VC,G):
     return all(u in VC or v in VC for u, v in G.edges())
 
-def hc(filename,maxtime=600,seed=10):
+def hc(filename,maxTime=600,seed=10):
+    fname = "DATA/"+filename
     random.seed(a=seed)
-    G = createGraph(filename)
+    G = createGraph(fname)
     pqueue = deque(sorted(G.degree, key=lambda x: x[1]),maxlen = len(G))
     VC = set(G.nodes())
-    term_time = time.time() + maxtime
-    while len(pqueue)>0 and time.time()<term_time:
+    startTime = time.time()
+
+    endTime = startTime + maxTime
+    solTrace = dict()
+
+    while len(pqueue)>0 and time.time()<endTime:
+        solTrace[round(time.time()-startTime,2)] = len(VC)
         currMinDeg = pqueue[0][1]
         currList = [pqueue.popleft()[0]]
         while len(pqueue)>0 and pqueue[0][1]==currMinDeg:
@@ -26,9 +32,9 @@ def hc(filename,maxtime=600,seed=10):
             if isValidVC(VC,G):
                 continue
             else:
-                VC.add(node) 
-
-    return VC
+                VC.add(node)
+    
+    return VC,list(solTrace.items())
 
 
 
