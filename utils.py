@@ -1,5 +1,4 @@
 import networkx as nx
-from collections import deque
 
 def createGraph(fname):
 

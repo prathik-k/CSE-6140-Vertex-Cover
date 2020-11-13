@@ -3,6 +3,7 @@ import time
 import random
 from random import shuffle
 from utils import createGraph
+from collections import deque
 
 def isValidVC(VC,G):
     return all(u in VC or v in VC for u, v in G.edges())
