@@ -22,9 +22,11 @@ def hc(filename,maxTime=600,seed=10):
         currMinDeg = pqueue[0][1]
         currList = [pqueue.popleft()[0]]
         while len(pqueue)>0 and pqueue[0][1]==currMinDeg and time.time()<endTime:
+            solTrace[round(time.time()-startTime,2)] = len(VC)
             currList.append(pqueue.popleft()[0])
         shuffle(currList)
         while(len(currList)>0) and time.time()<endTime:
+            solTrace[round(time.time()-startTime,2)] = len(VC)
             node = currList.pop()
             VC.remove(node)
             if isValidVC(VC,G):
