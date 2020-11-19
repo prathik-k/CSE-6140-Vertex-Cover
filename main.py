@@ -7,11 +7,23 @@ from LS1_hillclimb import hc
 
 if __name__=="__main__":
     '''
-    Sample command: python main.py --inst email.graph --alg ls1 --time 400 --seed 10
-    The implemented algorithms are Branch & Bound (bnb), Approximation (approx), Hill Climbing (ls1) and ...
-    
+    Sample command: python main.py --inst email.graph --alg ls1 --time 600 --seed 10
+    The implemented algorithms are Branch & Bound (bnb), Approximation (approx), Hill Climbing (ls1) and ...  
+    The available instances are:
+    1. as-22july06.graph
+    2. delaunay_n10.graph
+    3. dummy1.graph
+    4. email.graph
+    5. football.graph
+    6. help-th.graph
+    7. jazz.graph
+    8. karate.graph
+    9. netscience.graph
+    10. power.graph
+    11. star.graph
+    12. star2.graph
+    To run the procedure on all the sample graphs, simply provide the argument as "all" to --inst.
     '''
-
 
     parser = argparse.ArgumentParser(description='Different algorithms to compute the VC of a graph')
     parser.add_argument('--inst',action='store',type=str,required=True,help='Instance of graph')
@@ -20,8 +32,17 @@ if __name__=="__main__":
     parser.add_argument('--seed',action='store',default=10,type=int,required=False,help='Random Seed')
     args=parser.parse_args()    
     filename,alg,maxtime,seed = args.inst,args.alg,args.time,args.seed
+
+    allowed_inst = ["as-22july06.graph","delaunay_n10.graph","dummy1.graph","email.graph","football.graph",
+    "help-th.graph","jazz.graph","karate.graph","netscience.graph","power.graph","star.graph","star2.graph"]
     
     if alg.lower() == "ls1":
-        VC,solTrace = hc(filename,maxtime,seed)
-        print("VC generated")
-        write_to_file(VC,filename,"LS1",maxtime,seed,solTrace)
+        if filename=='all':
+            for inst in allowed_inst:
+                VC,solTrace = hc(inst,maxtime,seed)
+                print("VC generated")
+                write_to_file(VC,filename,"LS1",maxtime,seed,solTrace)
+        else:
+            VC,solTrace = hc(filename,maxtime,seed)
+            print("VC generated")
+            write_to_file(VC,filename,"LS1",maxtime,seed,solTrace)

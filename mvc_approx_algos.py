@@ -23,7 +23,6 @@ def approx_mvc(filename,maxTime=600,seed=10):
 		# both visited[u] and visited[v]
 		# are false
         if not visited[u]:
-
             for v in G[u]:
                 if not visited[v]:
 

@@ -12,8 +12,12 @@ def createGraph(fname):
         G.add_edges_from(edges)    
     return G
 
+def isValidVC(VC,G):
+    return all(u in VC or v in VC for u, v in G.edges())
+
 def write_to_file(VC,filename,alg,maxtime,seed,solTrace):
     fname = "results/"+filename+"_"+alg+"_"+str(maxtime)+"_"+str(seed)+".sol"
+    VC = list(map(str,VC))
     with open(fname, "w") as f:
         f.write(str(len(VC)) + "\n")
         f.write(str(",".join(list(VC))))

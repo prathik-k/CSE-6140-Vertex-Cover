@@ -2,11 +2,10 @@ import networkx as nx
 import time
 import random
 from random import shuffle
-from utils import createGraph
+from utils import *
 from collections import deque
 
-def isValidVC(VC,G):
-    return all(u in VC or v in VC for u, v in G.edges())
+
 
 def hc(filename,maxTime=600,seed=10):
     fname = "DATA/"+filename
@@ -15,7 +14,6 @@ def hc(filename,maxTime=600,seed=10):
     pqueue = deque(sorted(G.degree, key=lambda x: x[1]),maxlen = len(G))
     VC = set(G.nodes())
     startTime = time.time()
-
     endTime = startTime + maxTime
     solTrace = dict()
 
@@ -23,17 +21,16 @@ def hc(filename,maxTime=600,seed=10):
         solTrace[round(time.time()-startTime,2)] = len(VC)
         currMinDeg = pqueue[0][1]
         currList = [pqueue.popleft()[0]]
-        while len(pqueue)>0 and pqueue[0][1]==currMinDeg:
+        while len(pqueue)>0 and pqueue[0][1]==currMinDeg and time.time()<endTime:
             currList.append(pqueue.popleft()[0])
         shuffle(currList)
-        while(len(currList)>0):
+        while(len(currList)>0) and time.time()<endTime:
             node = currList.pop()
             VC.remove(node)
             if isValidVC(VC,G):
                 continue
             else:
                 VC.add(node)
-    
     return VC,list(solTrace.items())
 
 
