@@ -32,5 +32,4 @@ if __name__=="__main__":
     elif alg.lower() == "app":
         VC,solTrace = approx_mvc(filename,maxtime,seed)
         print("VC generated")
-        print(solTrace)
         write_to_file_app(VC,filename,"APP",maxtime,seed,solTrace)
