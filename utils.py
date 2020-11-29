@@ -1,4 +1,5 @@
 import networkx as nx
+import re
 
 def createGraph(fname):
     with open(fname) as f:
@@ -16,6 +17,7 @@ def isValidVC(VC,G):
     return all(u in VC or v in VC for u, v in G.edges())
 
 def write_to_file(VC,filename,alg,maxtime,seed,solTrace):
+    filename = filename.replace(".graph","")
     fname = "results/"+filename+"_"+alg+"_"+str(maxtime)+"_"+str(seed)+".sol"
     VC = list(map(str,VC))
     with open(fname, "w") as f:

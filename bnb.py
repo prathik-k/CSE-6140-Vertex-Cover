@@ -144,7 +144,6 @@ def Branch_And_Bound(G,T):
 				backtrack = True
 				#print('Second backtrack-vertex-',CN)
 
-
 		if backtrack == True:
 			# When we reach a deadend or find a feasible solution, we backtrack to search for another solution
 			if Frontier != []:	
