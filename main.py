@@ -8,10 +8,9 @@ from mvc_approx_algos import approx_mvc
 
 if __name__=="__main__":
     '''
-    Sample command: python main.py -inst power.graph -alg ls1 -time 600 -seed 20
+    Sample command: python main.py -inst power.graph -alg ls1 -time 600 -seed 10
     Sample command approx: python main.py -inst power.graph -alg app -time 600 -seed 10
     The implemented algorithms are Branch & Bound (bnb), Approximation (approx), Hill Climbing (ls1) and ...
-
     '''
 
 
