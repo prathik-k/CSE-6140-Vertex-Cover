@@ -32,7 +32,7 @@ if __name__=="__main__":
     elif alg.lower() == "app":
         VC,solTrace = approx_mvc(filename,maxtime,seed)
         print("VC generated")
-        write_to_file_app(VC,filename,"APP",maxtime,seed,solTrace)
+        write_to_file(VC,filename,"APP",maxtime,seed,solTrace)
         
     elif alg.lower() == "ls2":
         main_ls2(filename,maxtime,seed)

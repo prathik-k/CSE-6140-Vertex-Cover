@@ -58,5 +58,6 @@ def approx_mvc(filename,maxTime=600,seed=10):
                 vc_count += 1
         VC_ret = VC[0,0:vc_count]
         break
+    VC_ret = VC_ret.tolist()
     VC_ret = set([int(node) for node in VC_ret])
     return VC_ret, list(solTrace.items())
