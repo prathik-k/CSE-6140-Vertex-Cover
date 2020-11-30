@@ -4,8 +4,7 @@ import re
 def createGraph(fname):
     with open(fname) as f:
         next(f)
-        lines = f.read().splitlines()
-    
+        lines = f.read().splitlines()    
     G = nx.Graph()
     for i in range(len(lines)):
         nodes = map(int,lines[i].split())
@@ -29,24 +28,6 @@ def write_to_file(VC,filename,alg,maxtime,seed,solTrace):
         for trace in solTrace:
             line = str(trace[0])+","+str(trace[1])+"\n"
             f.write(line)
-            
-def write_to_file_app(VC,filename,alg,maxtime,seed,solTrace):
-    fname = "output/"+filename+"_"+alg+"_"+str(maxtime)+"_"+str(seed)+".sol"
-    with open(fname, "w") as f:
-        f.write(str(len(VC)) + "\n")
-        f.write((str(VC)))
-
-    traceFile = "output/"+filename+"_"+alg+"_"+str(maxtime)+"_"+str(seed)+".trace"
-    with open(traceFile, "w") as f:
-        for trace in solTrace:
-            line = str(trace[0])+","+str(trace[1])+"\n"
-            f.write(line)
-
-def createGraph_approx(fname):
-    with open(fname) as f:
-        next(f)
-        lines = f.read().splitlines()
-
     
 
 
