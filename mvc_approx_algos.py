@@ -21,18 +21,13 @@ def approx_mvc(filename,maxTime=600,seed=10):
     fname = "DATA/"+filename
     random.seed(a=seed)
     G = createGraph(fname)
-
     # initialize all vertices as not visited
     visited = [False for i in range(len(G.nodes()))]
     startTime = time.time()
     endTime = startTime + maxTime
     solTrace = dict()
-
     vc_count = 0
-
     VC = np.zeros((1,len(G.nodes())))
-    print((G.nodes()))
-
     while time.time()<endTime:
         # Consider all edges one by one
         for u in range(len(G.nodes())):
