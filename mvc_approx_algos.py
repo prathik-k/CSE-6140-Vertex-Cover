@@ -1,3 +1,14 @@
+'''
+This file implements the approximation algoritthm to find the minimum vertex cover for an input graph.
+TEAM 22, Aarohi
+Language: Python 3
+Executable: python main.py  -inst jazz.graph -alg app -time 600 -seed 10
+seed is not used though for approximation algorithm
+The output is two files: *.sol and *.trace created
+*.sol --- record the size of optimum vertex cover and the nodes in it.
+*.trace --- record all the optimum solution found during the search and the time it was found
+'''
+
 import networkx as nx
 import time
 import random
@@ -20,6 +31,8 @@ def approx_mvc(filename,maxTime=600,seed=10):
     vc_count = 0
 
     VC = np.zeros((1,len(G.nodes())))
+    print((G.nodes()))
+
     while time.time()<endTime:
         # Consider all edges one by one
         for u in range(len(G.nodes())):

@@ -5,6 +5,8 @@ import argparse
 from utils import write_to_file
 from LS1_hillclimb import hc
 from mvc_approx_algos import approx_mvc
+from ls2 import main_ls2
+
 
 if __name__=="__main__":
     '''
@@ -30,4 +32,10 @@ if __name__=="__main__":
     elif alg.lower() == "app":
         VC,solTrace = approx_mvc(filename,maxtime,seed)
         print("VC generated")
-        write_to_file(VC,filename,"APP",maxtime,seed,solTrace)
+        write_to_file_app(VC,filename,"APP",maxtime,seed,solTrace)
+        
+    elif alg.lower() == "ls2":
+        main_ls2(filename,maxtime,seed)
+        print("VC generated")
+        
+    

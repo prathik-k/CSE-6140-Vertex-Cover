@@ -28,6 +28,27 @@ def write_to_file(VC,filename,alg,maxtime,seed,solTrace):
         for trace in solTrace:
             line = str(trace[0])+","+str(trace[1])+"\n"
             f.write(line)
+<<<<<<< HEAD
+=======
+            
+def write_to_file_app(VC,filename,alg,maxtime,seed,solTrace):
+    fname = "results_approx/"+filename+"_"+alg+"_"+str(maxtime)+"_"+str(seed)+".sol"
+    with open(fname, "w") as f:
+        f.write(str(len(VC)) + "\n")
+        f.write((str(VC)))
+
+    traceFile = "results_approx/"+filename+"_"+alg+"_"+str(maxtime)+"_"+str(seed)+".trace"
+    with open(traceFile, "w") as f:
+        for trace in solTrace:
+            line = str(trace[0])+","+str(trace[1])+"\n"
+            f.write(line)
+
+def createGraph_approx(fname):
+    with open(fname) as f:
+        next(f)
+        lines = f.read().splitlines()
+
+>>>>>>> ce3647a218e73cd5b492f51fa297c750ce4f6361
     
 
 
