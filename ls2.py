@@ -81,7 +81,7 @@ def sim_ann(G, output, sol, cutoff, randseed, NumOfVer,start_time, input_file):
 
     start_time1 = time.time()
     time_end = time.time() + int(cutoff)
-    temp = 0.2     # set initial temperature
+    temp = 0.15     # set initial temperature based on Holger's stochastic local approach : 2004
     update_sol = sol.copy()
     random.seed(randseed)
     uncov_edges=[]
