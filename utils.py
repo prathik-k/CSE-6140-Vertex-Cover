@@ -31,12 +31,12 @@ def write_to_file(VC,filename,alg,maxtime,seed,solTrace):
             f.write(line)
             
 def write_to_file_app(VC,filename,alg,maxtime,seed,solTrace):
-    fname = "output/"+filename+"_"+alg+"_"+str(maxtime)+"_"+str(seed)+".sol"
+    fname = "results_approx/"+filename+"_"+alg+"_"+str(maxtime)+"_"+str(seed)+".sol"
     with open(fname, "w") as f:
         f.write(str(len(VC)) + "\n")
         f.write((str(VC)))
 
-    traceFile = "output/"+filename+"_"+alg+"_"+str(maxtime)+"_"+str(seed)+".trace"
+    traceFile = "results_approx/"+filename+"_"+alg+"_"+str(maxtime)+"_"+str(seed)+".trace"
     with open(traceFile, "w") as f:
         for trace in solTrace:
             line = str(trace[0])+","+str(trace[1])+"\n"
