@@ -14,7 +14,6 @@ The output is two files: *.sol and *.trace created
 *.sol --- record the size of optimum vertex cover and the nodes in it.
 *.trace --- record all the optimum solution found during the search and the time it was found
 '''
-
 def hc(filename,maxTime=600,seed=10):
     fname = "DATA/"+filename
     random.seed(a=seed)
@@ -23,12 +22,12 @@ def hc(filename,maxTime=600,seed=10):
     Defining a priority queue that contains all nodes in the graph in increasing order of node degree.
      The first items to be popped are the nodes with least degree.
     '''
-    pqueue = deque(sorted(G.degree, key=lambda x: x[1]),maxlen = len(G))
+    degrees = dict(sorted(G.degree().items(), key=lambda item: item[1]))
+    pqueue = deque(degrees.items())
     VC = set(G.nodes())
     startTime = time.time()
     endTime = startTime + maxTime
     solTrace = dict()
-
     '''
     This loop is terminated either when maxtime is reached, or 
     the priority queue is empty. Note that the timestamp is recorded within each nested
