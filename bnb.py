@@ -13,6 +13,8 @@ import networkx as net
 import operator
 import time
 import os
+from pathlib import Path
+
 
 # Function to read in the given input file
 def parse(datafile):
@@ -35,16 +37,94 @@ def create_graph(adj_list):
 		for j in adj_list[i]:
 			G.add_edge(i + 1, j)
 	return G
+ 
+'''
+ * Function:  max_degree
+ * --------------------
+ * Description:
+ *      Function to get a vertex which has maximum degree or number of edges
+ * Parameters:
+ *      G: Input graph G
+ * Returns:
+ *      Will give the vertex which has maximum degree
+ '''
+def max_degree(G):
+	# First we will find degrees of all vertices of graph G and then sort them in descending order
+	# Then, we can select the first element in the list, as it will have the highest degree
+	degree_list = G.degree()
+	# Our reverse will be true, as we want descending order.
+	# Key will be the second element in tuple of (vertex, degree), as we want to sort by degree
+	sorted_degree_list = sorted(degree_list, reverse = True, key = operator.itemgetter(1))  
+	x = sorted_degree_list[0] 
+	return x
+
+# def max_degree1(G):
+# 	# First we will find degrees of all vertices of graph G and then sort them in descending order
+# 	# Then, we can select the first element in the list, as it will have the highest degree
+# 	degree_list = G.degree()
+# 	# Our reverse will be true, as we want descending order.
+# 	# Key will be the second element in tuple of (vertex, degree), as we want to sort by degree
+# 	sorted_degree_list = sorted(degree_list, reverse = True, key = operator.itemgetter(1))  
+# 	x = sorted_degree_list[0] 
+# 	return x
+
+'''
+ * Function: Lower_Bound
+ * --------------------
+ * Description:
+ *      Function to initialise a lower bound for Vertex Cover solution
+ * Parameters:
+ *      G: Input graph G
+ * Returns:
+ *      Will return a lower bound for the input graph
+ '''
+def Lower_Bound(G):
+	# We can assume maximum degree of the graph as our initial lower bound for MVC
+	lb = math.floor(G.number_of_edges()/max_degree(G)[1])
+	return lb
+
+# Function to determine size of Vertex Cover Solution at any point or the number of vertices with state as 1
+'''
+ * Function:  Vertex_Cover_Size
+ * --------------------
+ * Description:
+ *      Function to determine number of elements currently in Vertex Cover Solution
+ * Parameters:
+ *      list: the input list of vertices along with their current states
+ * Returns:
+ *      Will give the number of elements currently in Vertex Cover Solution
+ '''
+def Vertex_Cover_Size(list):
+	# The input list is in the form of tuples, and the second element gives us the state of the vertex
+	# By adding the all the 2nd elements, we can get the size of Vertex Cover or the vertices which have state as 1  
+	size = 0
+	for i in list:
+		size = size + i[1]
+	return size
 
 # Branch and Bound Function:
+'''
+ * Function: Branch_And_Bound
+ * --------------------
+ * Description:
+ *      Function to find Minimum Vertex Cover solution to input graph using Branch and Bound Algorithm 
+ * Parameters:
+ *      G: Input graph G
+ *		T: Maximum Time upto after which we will terminate the algorithm
+ * Returns:
+ *      Will give the the solution for Minimum Vertex Problem along with 
+ '''
 
-def Branch_And_Bound(G,T):
+def Branch_And_Bound(filename,T):
 	# Noting the begin and finish time
+	adj_list = parse(filename)
+	G = create_graph(adj_list)
 
 	begin_time = time.time()
-	finish_time = begin_time
+	finish_time = begin_time + T
+	solTrace = dict()
 
-	#total_time = finish_time - begin_time
+	total_time = finish_time - begin_time
 	
 	# time_list when solution is found
 	time_list = []
@@ -58,6 +138,7 @@ def Branch_And_Bound(G,T):
 	# Setting Upper Bound as total number of vertices initially
 	UB = G.number_of_nodes()
 	print('Initial UpperBound:', UB)
+	solTrace[round(time.time()-begin_time,2)] = UB
 
 	# Storing a duplicate of graph G in Current_Graph
 	Current_Graph = G.copy() 
@@ -74,7 +155,7 @@ def Branch_And_Bound(G,T):
 	Frontier.append((a[0], 1, (-1, -1)))
 	# print(Frontier)
 
-	while Frontier!=[] and total_time < T:
+	while Frontier!=[] and time.time() < finish_time:
 		# We will select a candidate node (CN) for our solution as last element in Frontier Set
 		(CN,state,parent) = Frontier.pop()
 
@@ -95,15 +176,24 @@ def Branch_And_Bound(G,T):
 			for vertex in list(neighbor):
 				Current_VC.append((vertex, 1))
 				Current_Graph.remove_node(vertex)  
+			
+			#solTrace[round(time.time()-begin_time,2)] = len(Current_VC)
 
 		elif state == 1:  
 			# if CN is present in Vertex Cover, then it's neighbors will not be present and hence their state will be changed to 0
 			# CN will be removed from current graph list
 			Current_Graph.remove_node(CN) 
+			
 			#print('new Current_Graph',Current_Graph.edges())
 		else:
 			pass
 
+		
+		
+		# for node in Current_VC:
+		# 	if(node[1] == 0):
+		# 		Current_VC.remove(node) 
+		#solTrace[round(time.time()-begin_time,2)] = len(Current_VC)
 		Current_VC.append((CN, state))
 		Current_Vertex_Cover_Size = Vertex_Cover_Size(Current_VC)
 		#print('Current_VC Size', Current_Vertex_Cover_Size)
@@ -116,10 +206,10 @@ def Branch_And_Bound(G,T):
 			if Current_Vertex_Cover_Size < UB:
 				# If current vertex cover size is less than current optimal or upper bound, update upper bound and MVC
 				MVC = Current_VC.copy()
-				
 				print('Current Optimal Vertex Cover size is', Current_Vertex_Cover_Size)
 				UB = Current_Vertex_Cover_Size
-		
+				opt = round(time.time()-begin_time,2)
+				solTrace[round(time.time()-begin_time,2)] = UB
 				time_list.append((Current_Vertex_Cover_Size,time.time() - begin_time))
 			# As we completed one branch, we need to return or backtrack to previous nodes, to check for other solutions
 			backtrack = True
@@ -132,17 +222,22 @@ def Branch_And_Bound(G,T):
 			#print(CurLB)
 			#CurLB=297
 
-			if Current_LB < UB:  
+			if Current_LB <= UB:  
 				# The current branch still has potential and we can check further
 				# We will attach one new node with two states to our CN. CN will be the parent 
 				new_node = max_degree(Current_Graph)
 				Frontier.append((new_node[0], 0, (CN, state)))
 				Frontier.append((new_node[0], 1, (CN, state)))
+				
 				# print('Frontier',Frontier)
 			else:
 				# The current branch cannot give better solution then our current best and hence we backtrack from here
+				#if(solTrace.values() != Current_LB):
+				solTrace[round(time.time()-begin_time,2)] = Current_LB
+				
 				backtrack = True
 				#print('Second backtrack-vertex-',CN)
+
 
 		if backtrack == True:
 			# When we reach a deadend or find a feasible solution, we backtrack to search for another solution
@@ -183,56 +278,76 @@ def Branch_And_Bound(G,T):
 					print('There is an error and backtracking not possible')
 
 		
-		finish_time = time.time()
-		total_time = finish_time - begin_time
-		if total_time > T:
+		#finish_time = time.time()
+		#total_time = finish_time - begin_time
+		if time.time() > finish_time:
 			print('We have crossed our given time for running the algorithm, hence terminating here')
 
-	return MVC, time_list
-
-# Function to get a vertex which has maximum degree or number of edges 
-def max_degree(G):
-	# First we will find degrees of all vertices of graph G and then sort them in descending order
-	# Then, we can select the first element in the list, as it will have the highest degree
-	degree_list = G.degree()
-	# Our reverse will be true, as we want descending order.
-	# Key will be the second element in tuple of (vertex, degree), as we want to sort by degree
-	sorted_degree_list = sorted(degree_list, reverse = True, key = operator.itemgetter(1))  
-	x = sorted_degree_list[0] 
-	return x
-
-# Intialising Lower Bound for the graph
-def Lower_Bound(G):
-	# We can assume maximum degree of the graph as our initial lower bound for MVC
-	lb = max_degree(G)[1]
-	return lb
-
-# Function to determine size of Vertex Cover Solution at any point or the number of vertices with state as 1
-def Vertex_Cover_Size(list):
-	# The input list is in the form of tuples, and the second element gives us the state of the vertex
-	# By adding the all the 2nd elements, we can get the size of Vertex Cover or the vertices which have state as 1  
-	size = 0
-	for i in list:
-		size = size + i[1]
-	return size
-
-
-# Main Function
-
-def main(data_file, result_file, max_time, randSeed):
-
-	# Taking the main data file
-	adj_list = parse(data_file)	
-
-	# Making graph from the input file 
-	g = create_graph(adj_list)
-
-	MVC,time_list = Branch_And_Bound(g, max_time)
-
-	# Removing the nodes with state = 0 condition
 	for node in MVC:
-		if node[1]==0:
-			MVC.remove(node)
+		if(node[1] == 0):
+			MVC.remove(node)    
+	
+	solution = MVC
+	MVC = [node[0] for node in MVC]
+	MVC.sort()
+	
+	str(MVC)
+	solTrace = list(solTrace.items())
+	solTrace.sort(key = lambda x:x[0], reverse=False)
+	#print(f"Optimal Vertex Cover size is: {UB} and is calculated in {opt} seconds. ")
+	return MVC, solTrace, solution
 
+
+
+def write_to_file(VC,filename,alg,maxtime,seed,solTrace):
+    fname = "results/"+filename+"_"+alg+"_"+str(maxtime)+"_"+str(seed)+".sol"
+    VC = list(map(str,VC))
+    with open(fname, "w") as f:
+        f.write(str(len(VC)) + "\n")
+        f.write(str(",".join(list(VC))))
+
+    
+    traceFile = "results/"+filename+"_"+alg+"_"+str(maxtime)+"_"+str(seed)+".trace"
+    with open(traceFile, "w") as f:
+        for trace in solTrace:
+            line = str(trace[0])+","+str(trace[1])+"\n"
+            f.write(line)
+
+if __name__=="__main__":
+    '''
+    Sample command: python main.py -inst power.graph -alg ls1 -time 600 -seed 10
+    Sample command approx: python main.py -inst power.graph -alg app -time 600 -seed 10
+    The implemented algorithms are Branch & Bound (bnb), Approximation (approx), Hill Climbing (ls1) and ...
+    '''
+
+
+    parser = argparse.ArgumentParser(description='Different algorithms to compute the VC of a graph')
+    parser.add_argument('-inst',action='store',type=str,required=True,help='Instance of graph')
+    parser.add_argument('-alg',action='store',type=str,required=True,help='Type of algorithm - (BnB,Approx,LS1 (Hill climbing),...)')
+    parser.add_argument('-time',action='store',default=600,type=int,required=True,help='Maximum runtime (s)')
+    parser.add_argument('-seed',action='store',default=10,type=int,required=False,help='Random Seed')
+    args=parser.parse_args()
+    filename,alg,maxtime,seed = args.inst,args.alg,args.time,args.seed
+
+    if alg.lower() == "ls1":
+        VC,solTrace = hc(filename,maxtime,seed)
+        print("VC generated")
+        write_to_file(VC,filename,"LS1",maxtime,seed,solTrace)
+
+    elif alg.lower() == "app":
+        VC,solTrace = approx_mvc(filename,maxtime,seed)
+        print("VC generated")
+        write_to_file_app(VC,filename,"APP",maxtime,seed,solTrace)
+        
+    elif alg.lower() == "ls2":
+        main_ls2(filename,maxtime,seed)
+        print("VC generated")
+
+    elif alg.lower() == "bnb":
+        VC,solTrace,solution = Branch_And_Bound(filename,maxtime)
+        print(solution)
+        print("VC generated")
+        write_to_file(VC,filename,"BNB",maxtime,seed,solTrace)
+		
 
 	

@@ -32,10 +32,9 @@ def sim_ann(G, sol, cutoff, randseed, NumOfVer,start_time, input_file,opt_cutoff
     uncov_edges=[]
     solTrace = dict()
     while ((time.time() - start_time1) < cutoff and len(update_sol) > opt_cutoff[str(input_file)]):
-        solTrace[round(time.time()-start_time,2)] = len(update_sol)
         temp = 0.95 * temp       # update temperature
         count = 0
-        while count < (NumOfVer - len(update_sol)-1) * (NumOfVer - len(update_sol) - 1) and len(update_sol) > opt_cutoff[str(input_file)]:
+        while count < (NumOfVer - len(update_sol)-1) * (NumOfVer - len(update_sol) - 1) and len(update_sol) > opt_cutoff[str(input_file)]and (time.time() - start_time1) < cutoff:
             solTrace[round(time.time()-start_time,2)] = len(update_sol)
             count += 1
             if ((time.time() - start_time1) < cutoff)and len(update_sol) > opt_cutoff[str(input_file)]:
