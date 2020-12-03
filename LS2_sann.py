@@ -1,8 +1,8 @@
 '''
-This file implements the Simulate Annealing algoritthm to find the minimum vertex cover for an input graph.
+This file implements the Simulate Annealing algorithm to find the minimum vertex cover for an input graph.
 TEAM 22, Aarohi, Prathik
 Language: Python 3
-Executable: python main.py  -inst karate.graph -alg ls2 -time 600 -seed 10
+Executable example: python main.py  -inst karate.graph -alg ls2 -time 600 -seed 10
 The output is two files: *.sol and *.trace created
 *.sol --- record the size of optimum vertex cover and the nodes in it.
 *.trace --- record all the optimum solution found during the search and the time it was found
@@ -32,18 +32,19 @@ def sim_ann(G, sol, cutoff, randseed, NumOfVer,start_time, input_file,opt_cutoff
     uncov_edges=[]
     solTrace = dict()
     while ((time.time() - start_time1) < cutoff and len(update_sol) > opt_cutoff[str(input_file)]):
+        solTrace[round(time.time()-start_time,2)] = len(update_sol)
         temp = 0.95 * temp       # update temperature
         count = 0
         while count < (NumOfVer - len(update_sol)-1) * (NumOfVer - len(update_sol) - 1) and len(update_sol) > opt_cutoff[str(input_file)]:
+            solTrace[round(time.time()-start_time,2)] = len(update_sol)
             count += 1
             if ((time.time() - start_time1) < cutoff)and len(update_sol) > opt_cutoff[str(input_file)]:
                 while not uncov_edges:
                     update_sol = sol.copy()
-                    #output.write(str(round(time.time()-start_time)) + "," + str(len(update_sol)) + "\n")
-                    #output.write('%.10f, %i\n' % ((time.time()-start_time), len(update_sol)))
                     solTrace[round(time.time()-start_time,2)] = len(update_sol)
                     delete = random.choice(sol)
                     for x in G.neighbors(delete):
+                        solTrace[round(time.time()-start_time,2)] = len(update_sol)
                         if x not in sol:
                             uncov_edges.append((x,delete))
                             uncov_edges.append((delete,x))
@@ -52,6 +53,7 @@ def sim_ann(G, sol, cutoff, randseed, NumOfVer,start_time, input_file,opt_cutoff
                 uncov_curr = uncov_edges.copy()
                 delete = random.choice(sol)
                 for x in G.neighbors(delete):
+                    solTrace[round(time.time()-start_time,2)] = len(update_sol)
                     if x not in sol:
                         uncov_edges.append((x,delete))
                         uncov_edges.append((delete,x))
@@ -63,6 +65,7 @@ def sim_ann(G, sol, cutoff, randseed, NumOfVer,start_time, input_file,opt_cutoff
                     better_add = enter[0]
                 sol.append(better_add)
                 for x in G.neighbors(better_add):
+                    solTrace[round(time.time()-start_time,2)] = len(update_sol)
                     if x not in sol:
                         uncov_edges.remove((better_add,x))
                         uncov_edges.remove((x,better_add))
@@ -74,36 +77,19 @@ def sim_ann(G, sol, cutoff, randseed, NumOfVer,start_time, input_file,opt_cutoff
                     if num > prob:    # do not accept modified solution
                         sol = current.copy()
                         uncov_edges = uncov_curr.copy()
-    return update_sol,list(solTrace.items())
+    return set(update_sol),list(solTrace.items())
 
 def main_ls2(graph_file,cutoff, randSeed):
     opt_cutoff = {'DATA/jazz.graph':158, 'DATA/karate.graph':14, 'DATA/football.graph':94,
     'DATA/as-22july06.graph':3303, 'DATA/hep-th.graph':3926,'DATA/star.graph':6902, 'DATA/star2.graph':4542,
     'DATA/netscience.graph':899, 'DATA/email.graph':594, 'DATA/delaunay_n10.graph':703, 'DATA/power.graph':2203}
-
-    filename = graph_file.replace(".graph","")
+    
     graph_file  = "DATA/"+graph_file
     randseed = int(randSeed)
-    solFile =  "output/"+filename + "_LS2_" + str(cutoff) + "_" + str(randseed) + ".sol"
-    traceFile= "output/"+filename + "_LS2_" + str(cutoff) + "_" + str(randseed) + ".trace"
-
     G = createGraph(graph_file)
     NumOfVer = G.number_of_nodes()
     G1 = G.copy()
     start_time = time.time()
     sol = initial_solution(G1,graph_file)
     final_solution,solTrace = sim_ann(G,sol,cutoff,randseed,NumOfVer,start_time,graph_file,opt_cutoff)
-
-
-    with open(traceFile, "w") as f:
-        for trace in solTrace:
-            line = str(trace[0])+","+str(trace[1])+"\n"
-            f.write(line)
-
-    size = len(final_solution)
-    total_time = round(time.time() - start_time)
-    output1 = open(solFile, 'w')
-    output1.write(str(size) + '\n')
-    for vid in range(size-1):
-        output1.write(str(final_solution[vid]) + ',')
-        output1.write(str(final_solution[vid+1]))
+    return final_solution,solTrace

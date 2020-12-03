@@ -5,7 +5,7 @@ import argparse
 from utils import write_to_file
 from LS1_hillclimb import hc
 from mvc_approx_algos import approx_mvc
-from ls2 import main_ls2
+from LS2_sann import main_ls2
 
 
 if __name__=="__main__":
@@ -14,8 +14,6 @@ if __name__=="__main__":
     Sample command approx: python main.py -inst power.graph -alg app -time 600 -seed 10
     The implemented algorithms are Branch & Bound (bnb), Approximation (approx), Hill Climbing (ls1) and ...
     '''
-
-
     parser = argparse.ArgumentParser(description='Different algorithms to compute the VC of a graph')
     parser.add_argument('-inst',action='store',type=str,required=True,help='Instance of graph')
     parser.add_argument('-alg',action='store',type=str,required=True,help='Type of algorithm - (BnB,Approx,LS1 (Hill climbing),...)')
@@ -35,7 +33,7 @@ if __name__=="__main__":
         write_to_file(VC,filename,"APP",maxtime,seed,solTrace)
         
     elif alg.lower() == "ls2":
-        main_ls2(filename,maxtime,seed)
+        VC,solTrace = main_ls2(filename,maxtime,seed)
         print("VC generated")
-        
+        write_to_file(VC,filename,"LS2",maxtime,seed,solTrace)
     

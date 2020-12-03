@@ -56,6 +56,7 @@ def hc(filename,maxTime=600,seed=10):
                 continue
             else:
                 VC.add(node)
+    print(VC,list(solTrace.items()))
     return VC,list(solTrace.items())
 
 
