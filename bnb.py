@@ -18,7 +18,6 @@ from utils import *
 
 
 # Function to read in the given input file
-#change
 def parse(datafile):
 	# Declaring empty adjacency list
 	adj_list = []
@@ -57,7 +56,8 @@ def max_degree(G):
 	degree_list = G.degree()
 	# Our reverse will be true, as we want descending order.
 	# Key will be the second element in tuple of (vertex, degree), as we want to sort by degree
-	sorted_degree_list = sorted(degree_list, reverse = True, key = operator.itemgetter(1))  
+
+	sorted_degree_list = list(sorted(degree_list.items(), key=lambda item: item[1], reverse = True))
 	x = sorted_degree_list[0] 
 	return x
 
