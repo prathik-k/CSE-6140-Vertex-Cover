@@ -1,6 +1,6 @@
 '''
 This file implements the Simulate Annealing algoritthm to find the minimum vertex cover for an input graph.
-TEAM 22, Aarohi
+TEAM 22, Aarohi, Prathik
 Language: Python 3
 Executable: python main.py  -inst karate.graph -alg ls2 -time 600 -seed 10
 The output is two files: *.sol and *.trace created
