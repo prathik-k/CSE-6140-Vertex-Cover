@@ -18,6 +18,7 @@ from utils import *
 
 
 # Function to read in the given input file
+#change
 def parse(datafile):
 	# Declaring empty adjacency list
 	adj_list = []
