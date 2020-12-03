@@ -14,12 +14,14 @@ import operator
 import time
 import os
 from pathlib import Path
+from utils import *
 
 
 # Function to read in the given input file
 def parse(datafile):
 	# Declaring empty adjacency list
 	adj_list = []
+	datafile = "DATA/"+datafile
 	with open(datafile) as df:
 		# Reading number of vertices, number of edges and whether the graph is unidrected from the first line of data file
 		num_vertices, num_edges, weighted = map(int, df.readline().split())
@@ -39,7 +41,7 @@ def create_graph(adj_list):
 	return G
  
 '''
- * Function:  max_degree
+ * Function: max_degree
  * --------------------
  * Description:
  *      Function to get a vertex which has maximum degree or number of edges
@@ -186,21 +188,14 @@ def Branch_And_Bound(filename,T):
 			
 			#print('new Current_Graph',Current_Graph.edges())
 		else:
-			pass
-
-		
-		
+			pass	
 		# for node in Current_VC:
 		# 	if(node[1] == 0):
 		# 		Current_VC.remove(node) 
 		#solTrace[round(time.time()-begin_time,2)] = len(Current_VC)
 		Current_VC.append((CN, state))
 		Current_Vertex_Cover_Size = Vertex_Cover_Size(Current_VC)
-		#print('Current_VC Size', Current_Vertex_Cover_Size)
-		# print(Current_Graph.number_of_edges())
-		# print(Current_Graph.edges())
 
-		# print('no of edges',Current_Graph.number_of_edges())
 		if Current_Graph.number_of_edges() == 0:  
 			# There are no edges left in the current graph after every possibility
 			if Current_Vertex_Cover_Size < UB:
@@ -313,41 +308,7 @@ def write_to_file(VC,filename,alg,maxtime,seed,solTrace):
             line = str(trace[0])+","+str(trace[1])+"\n"
             f.write(line)
 
-if __name__=="__main__":
-    '''
-    Sample command: python main.py -inst power.graph -alg ls1 -time 600 -seed 10
-    Sample command approx: python main.py -inst power.graph -alg app -time 600 -seed 10
-    The implemented algorithms are Branch & Bound (bnb), Approximation (approx), Hill Climbing (ls1) and ...
-    '''
 
-
-    parser = argparse.ArgumentParser(description='Different algorithms to compute the VC of a graph')
-    parser.add_argument('-inst',action='store',type=str,required=True,help='Instance of graph')
-    parser.add_argument('-alg',action='store',type=str,required=True,help='Type of algorithm - (BnB,Approx,LS1 (Hill climbing),...)')
-    parser.add_argument('-time',action='store',default=600,type=int,required=True,help='Maximum runtime (s)')
-    parser.add_argument('-seed',action='store',default=10,type=int,required=False,help='Random Seed')
-    args=parser.parse_args()
-    filename,alg,maxtime,seed = args.inst,args.alg,args.time,args.seed
-
-    if alg.lower() == "ls1":
-        VC,solTrace = hc(filename,maxtime,seed)
-        print("VC generated")
-        write_to_file(VC,filename,"LS1",maxtime,seed,solTrace)
-
-    elif alg.lower() == "app":
-        VC,solTrace = approx_mvc(filename,maxtime,seed)
-        print("VC generated")
-        write_to_file_app(VC,filename,"APP",maxtime,seed,solTrace)
-        
-    elif alg.lower() == "ls2":
-        main_ls2(filename,maxtime,seed)
-        print("VC generated")
-
-    elif alg.lower() == "bnb":
-        VC,solTrace,solution = Branch_And_Bound(filename,maxtime)
-        print(solution)
-        print("VC generated")
-        write_to_file(VC,filename,"BNB",maxtime,seed,solTrace)
 		
 
 	
