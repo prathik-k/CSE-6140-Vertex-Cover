@@ -9,14 +9,15 @@ from collections import deque
 This file implements the approximation algoritthm to find the minimum vertex cover for an input graph.
 TEAM 22, Prathik
 Language: Python 3
-Executable: python main.py  -inst jazz.graph -alg ls1 -time 600 -seed 10
+Executable: python main.py  -inst star2.graph -alg ls1 -time 600 -seed 100
 The output is two files: *.sol and *.trace created
 *.sol --- record the size of optimum vertex cover and the nodes in it.
 *.trace --- record all the optimum solution found during the search and the time it was found
 '''
+
+
 def hc(filename,maxTime=600,seed=10):
     fname = "DATA/"+filename
-    random.seed(a=seed)
     G = createGraph(fname)
     '''
     Defining a priority queue that contains all nodes in the graph in increasing order of node degree.
@@ -44,7 +45,7 @@ def hc(filename,maxTime=600,seed=10):
         Shuffling the contents of the current list, in which all nodes have the same degree.
         This procedure utilizes the specified random seed.
         '''
-        shuffle(currList)
+        random.Random(seed).shuffle(currList)
         while(len(currList)>0) and time.time()<endTime:
             solTrace[round(time.time()-startTime,2)] = len(VC)
             node = currList.pop()
@@ -56,7 +57,6 @@ def hc(filename,maxTime=600,seed=10):
                 continue
             else:
                 VC.add(node)
-    print(VC,list(solTrace.items()))
     return VC,list(solTrace.items())
 
 

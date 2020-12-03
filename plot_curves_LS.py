@@ -7,10 +7,8 @@ For the power.graph instance, the LS1 (hill climbing) algorithm yielded an avera
 8% solution: size=4728
 10% solution: size=4675
 20% solution: size=4409
-
 We plot the QRTD plots for the above cases, with the time ranging from 0-17s.
 '''
-
 
 def plot_qrtd(inst='power',maxtime=600,seeds=[10,20,30,40,50,60,70,80,90,100],method="LS1",perc_sols = [0.5,1,5,10,15,20,30,60,70,80,90]):    
     if inst=='power':
@@ -28,9 +26,7 @@ def plot_qrtd(inst='power',maxtime=600,seeds=[10,20,30,40,50,60,70,80,90,100],me
         all_cases.append(tracevals)
         final_results.append(list(tracevals.values())[-1])
         mt = max(mt,list(tracevals.keys())[-1])
-    mean_VC_size = int(np.mean(final_results))
-    print(final_results)
-    print("Mean VC size is ",mean_VC_size," and maximum total compute time is ",mt)
+        
     for case in all_cases:
         if mt not in case:
             finalkey,finalval = max(case, key=int),case[max(case, key=int)]
@@ -40,7 +36,7 @@ def plot_qrtd(inst='power',maxtime=600,seeds=[10,20,30,40,50,60,70,80,90,100],me
     for perc in perc_sols:
         target_size = int(q*(100+perc)/100)
         target_sizes[perc] = target_size 
-
+    print(target_sizes)
     xvals = np.arange(mt)
     for perc in perc_sols:        
         P_vals = []
@@ -56,8 +52,8 @@ def plot_qrtd(inst='power',maxtime=600,seeds=[10,20,30,40,50,60,70,80,90,100],me
     plt.xlabel("Time (s)")
     plt.legend()
     plt.show()
-            
-def plot_sqd(inst='power',maxtime=600,seeds=[10,20,30,40,50,60,70,80,90,100],method="LS1",times = [3,5,10,20,40,80,100]):
+
+def plot_sqd(inst='power',maxtime=600,seeds=[10,20,30,40,50,60,70,80,90,100],method="LS1",perc_sols = np.linspace(0,100,21)):
     if inst=='power':
         q = 2203
     elif inst=='star2':
@@ -69,15 +65,31 @@ def plot_sqd(inst='power',maxtime=600,seeds=[10,20,30,40,50,60,70,80,90,100],met
         with open(fname,'r') as f:
             tracevals = f.readlines()
         tracevals = [x.strip().split(",") for x in tracevals]
-        tracevals = [(float(t),int(vc_size)) for (t,vc_size) in tracevals]
-        print(tracevals)
+        tracevals = {int(float(t)):int(vc_size) for (t,vc_size) in tracevals}
+        all_cases.append(tracevals)
+        final_results.append(list(tracevals.values())[-1])
+        mt = max(mt,list(tracevals.keys())[-1])
 
+    target_sizes = {}
+    for perc in perc_sols:
+        target_size = int(q*(100+perc)/100)
+        target_sizes[perc] = target_size     
+    print(target_sizes)    
+    times = np.round(np.linspace(0,mt,num=11),2)
+    print(times)
+    for case in all_cases:
+        for t in times:
+            case[t] = case.get(t, case[min(case.keys(), key=lambda k: abs(k-t))])
+
+    for i in range(len(all_cases)):        
+        case = {k:v for k,v in all_cases[i].items() if k in times}
+        all_cases[i] = case
 
     
-    
+ 
 
 if __name__=="__main__":
-    plot_qrtd("power")
+    plot_sqd("star2")
 
 
     
