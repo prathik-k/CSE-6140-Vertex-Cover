@@ -177,7 +177,6 @@ def Branch_And_Bound(filename,T):
 				solTrace[round(time.time()-begin_time,2)] = Current_LB				
 				backtrack = True
 
-
 		if backtrack == True:
 			# When we reach a deadend or find a feasible solution, we backtrack to search for another solution
 			if Frontier != []:	
@@ -194,20 +193,16 @@ def Branch_And_Bound(filename,T):
 						# We will reverse the changes done in Current Vertex Cover list from back till the last_parent location
 						# Remove them from Current_VC list
 						# Add them again in Current Graph list
-
 						node, state = Current_VC.pop()	
 						Current_Graph.add_node(node)	
-
 						# We will find the nodes that are connected to CN through direct edges and not present in current Vertex Cover Solution
 						# Current_VC is a tuple and the first element has the vertex, hence extracting that through lambda function
-						Nodes_Current_VC = list(map(lambda x:x[0], Current_VC))
-						
+						Nodes_Current_VC = list(map(lambda x:x[0], Current_VC))						
 						# For loop to pass thorugh each neighbor of node
 						for value in G.neighbors(node):
 							# Adding the edge of CN again to Current_Graph, if the node is not present in Current Vertex Cover but in Current Graph
 							if ((value in Current_Graph.nodes()) and (value not in Nodes_Current_VC)):
 								Current_Graph.add_edge(value, node)	
-
 				elif last_parent == (-1, -1):
 					# We have traced back to the start or root node, hence will restore our Current Graph and clear the Vertex Cover
 					Current_VC.clear()
@@ -215,18 +210,14 @@ def Branch_And_Bound(filename,T):
 				else:
 					# If both of the above cases fail, then there is an error and backtracking is not possible
 					print('There is an error and backtracking not possible')
-
 		if time.time() > finish_time:
 			print('We have crossed our given time for running the algorithm, hence terminating here')
-
 	for node in MVC:
 		if(node[1] == 0):
-			MVC.remove(node)    
-	
+			MVC.remove(node)    	
 	solution = MVC
 	MVC = [node[0] for node in MVC]
-	MVC.sort()
-	
+	MVC.sort()	
 	str(MVC)
 	solTrace = list(solTrace.items())
 	solTrace.sort(key = lambda x:x[0], reverse=False)
