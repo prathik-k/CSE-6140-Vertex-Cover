@@ -7,9 +7,10 @@ def createGraph(fname):
         lines = f.read().splitlines()    
     G = nx.Graph()
     for i in range(len(lines)):
-        nodes = map(int,lines[i].split())
+        nodes = list(map(int,lines[i].split()))
         edges = [(i+1,v) for v in nodes]
-        G.add_edges_from(edges)    
+        G.add_edges_from(edges)
+        G.add_node(i+1)    
     return G
 
 def isValidVC(VC,G):

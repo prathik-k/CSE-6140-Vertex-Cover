@@ -6,17 +6,21 @@ from utils import write_to_file
 from LS1_hillclimb import hc
 from approx import approx_mvc
 from LS2_sann import main_ls2
-from Branch_And_Bound import bnb
+from Branch_and_Bound import bnb
 
 
 if __name__=="__main__":
     '''
     Sample command for ls1: python main.py -inst star2.graph -alg ls1 -time 1000 -seed 10
     Sample command for ls2: python main.py -inst star2.graph -alg ls2 -time 1000 -seed 10
-    Sample command approx: python main.py -inst power.graph -alg app -time 1000 -seed 10
+    Sample command approx: python main.py -inst as-22july06.graph -alg app -time 1000 -seed 10
     Sample command for b&b: python main.py -inst power.graph -alg bnb -time 1000 -seed 10
     
     The implemented algorithms are Branch & Bound (bnb), Approximation (approx), Hill Climbing (ls1) and Simulated Annealing (ls2)
+
+    ['jazz.graph', 'karate.graph', 'football.graph','as-22july06.graph',
+    'hep-th.graph','star.graph', 'star2.graph',
+    'netscience.graph', 'email.graph', 'delaunay_n10.graph', 'power.graph','dummy1.graph','dummy2.graph']
     '''
     parser = argparse.ArgumentParser(description='Different algorithms to compute the VC of a graph')
     parser.add_argument('-inst',action='store',type=str,required=True,help='Instance of graph')

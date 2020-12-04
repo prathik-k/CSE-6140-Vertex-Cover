@@ -52,12 +52,14 @@ def approx_mvc(filename,maxTime=600,seed=10):
                                 sol_check += 1
                             solTrace[round(time.time()-startTime,2)] = sol_check
                         break
+
         for j in range(len(G.nodes())):
+
             if visited[j]:
+
                 VC[0,vc_count] = j
                 vc_count += 1
         VC_ret = VC[0,0:vc_count]
         break
-    VC_ret = VC_ret.tolist()
-    VC_ret = set([int(node) for node in VC_ret])
+
     return VC_ret, list(solTrace.items())
