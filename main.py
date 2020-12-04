@@ -14,7 +14,7 @@ if __name__=="__main__":
     Sample command for ls1: python main.py -inst star2.graph -alg ls1 -time 1000 -seed 10
     Sample command for ls2: python main.py -inst star2.graph -alg ls2 -time 1000 -seed 10
     Sample command approx: python main.py -inst as-22july06.graph -alg app -time 1000 -seed 10
-    Sample command for b&b: python main.py -inst power.graph -alg bnb -time 1000 -seed 10
+    Sample command for b&b: python main.py -inst karate.graph -alg bnb -time 1000 -seed 10
     
     The implemented algorithms are Branch & Bound (bnb), Approximation (approx), Hill Climbing (ls1) and Simulated Annealing (ls2)
 
@@ -46,6 +46,6 @@ if __name__=="__main__":
         write_to_file(VC,filename,"LS2",maxtime,seed,solTrace)
     
     elif alg.lower() == "bnb":
-        VC,solTrace,solution = bnb(filename,maxtime)
+        VC,solTrace,solution = bnb(filename,maxtime,seed)
         print("VC generated")
         write_to_file(VC,filename,"BNB",maxtime,seed,solTrace)

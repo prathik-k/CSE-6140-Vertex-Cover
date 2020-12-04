@@ -16,6 +16,29 @@ import os
 from pathlib import Path
 from utils import *
 
+
+# Function to read in the given input file
+def parse(datafile):
+	datafile = "DATA/"+datafile
+	# Declaring empty adjacency list
+	adj_list = []
+	with open(datafile) as df:
+		# Reading number of vertices, number of edges and whether the graph is unidrected from the first line of data file
+		num_vertices, num_edges, weighted = map(int, df.readline().split())
+		# Using for loop through every vertex to find their neighbors and store in adjacency list
+		for i in range(num_vertices):
+			adj_list.append(map(int, df.readline().split()))
+	return adj_list
+
+# Function to create graph using adjacency list
+def create_graph(adj_list):
+	# Creating graph G using module Networkx 
+	G = net.Graph()
+	# Adding edges in the graph G as per adjacency list
+	for i in range(len(adj_list)):
+		for j in adj_list[i]:
+			G.add_edge(i + 1, j)
+	return G
 '''
  * Function: max_degree
  * --------------------
@@ -84,13 +107,16 @@ def Vertex_Cover_Size(list):
  '''
 
 def bnb(filename,T,seed):
-	# Noting the begin and finish time
-	G = createGraph("DATA/"+filename)
+# Noting the begin and finish time
+	adj_list = parse(filename)
+	G = create_graph(adj_list)
 
 	begin_time = time.time()
 	finish_time = begin_time + T
 	solTrace = dict()
 
+	total_time = finish_time - begin_time
+	
 	# time_list when solution is found
 	time_list = []
 
