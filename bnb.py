@@ -16,30 +16,6 @@ import os
 from pathlib import Path
 from utils import *
 
-
-# Function to read in the given input file
-def parse(datafile):
-	# Declaring empty adjacency list
-	adj_list = []
-	datafile = "DATA/"+datafile
-	with open(datafile) as df:
-		# Reading number of vertices, number of edges and whether the graph is unidrected from the first line of data file
-		num_vertices, num_edges, weighted = map(int, df.readline().split())
-		# Using for loop through every vertex to find their neighbors and store in adjacency list
-		for i in range(num_vertices):
-			adj_list.append(map(int, df.readline().split()))
-	return adj_list
-
-# Function to create graph using adjacency list
-def create_graph(adj_list):
-	# Creating graph G using module Networkx 
-	G = net.Graph()
-	# Adding edges in the graph G as per adjacency list
-	for i in range(len(adj_list)):
-		for j in adj_list[i]:
-			G.add_edge(i + 1, j)
-	return G
- 
 '''
  * Function: max_degree
  * --------------------
@@ -59,16 +35,6 @@ def max_degree(G):
 	sorted_degree_list = list(sorted(degree_list.items(), key=lambda item: item[1], reverse = True))
 	x = sorted_degree_list[0] 
 	return x
-
-# def max_degree1(G):
-# 	# First we will find degrees of all vertices of graph G and then sort them in descending order
-# 	# Then, we can select the first element in the list, as it will have the highest degree
-# 	degree_list = G.degree()
-# 	# Our reverse will be true, as we want descending order.
-# 	# Key will be the second element in tuple of (vertex, degree), as we want to sort by degree
-# 	sorted_degree_list = sorted(degree_list, reverse = True, key = operator.itemgetter(1))  
-# 	x = sorted_degree_list[0] 
-# 	return x
 
 '''
  * Function: Lower_Bound
@@ -119,8 +85,7 @@ def Vertex_Cover_Size(list):
 
 def Branch_And_Bound(filename,T):
 	# Noting the begin and finish time
-	adj_list = parse(filename)
-	G = create_graph(adj_list)
+	G = createGraph("DATA/"+filename)
 
 	begin_time = time.time()
 	finish_time = begin_time + T
@@ -161,14 +126,7 @@ def Branch_And_Bound(filename,T):
 		# We will select a candidate node (CN) for our solution as last element in Frontier Set
 		(CN,state,parent) = Frontier.pop()
 
-		#print('New Iteration(CN,state,parent):', CN, state, parent)
 		backtrack = False
-
-		#print(parent[0])
-		# print('Neigh',CN,neighbor)
-		# print('Remaining no of edges',Current_Graph.number_of_edges())
-
-
 		if state == 0:  
 			# CN is not present in Vertex Cover, we will select all neighbors of CN in Vertex Cover and change their states to 1
 			# neighbor list will contain all neighbors of CN of current graph
@@ -186,13 +144,9 @@ def Branch_And_Bound(filename,T):
 			# CN will be removed from current graph list
 			Current_Graph.remove_node(CN) 
 			
-			#print('new Current_Graph',Current_Graph.edges())
 		else:
 			pass	
-		# for node in Current_VC:
-		# 	if(node[1] == 0):
-		# 		Current_VC.remove(node) 
-		#solTrace[round(time.time()-begin_time,2)] = len(Current_VC)
+
 		Current_VC.append((CN, state))
 		Current_Vertex_Cover_Size = Vertex_Cover_Size(Current_VC)
 
@@ -201,14 +155,12 @@ def Branch_And_Bound(filename,T):
 			if Current_Vertex_Cover_Size < UB:
 				# If current vertex cover size is less than current optimal or upper bound, update upper bound and MVC
 				MVC = Current_VC.copy()
-				print('Current Optimal Vertex Cover size is', Current_Vertex_Cover_Size)
 				UB = Current_Vertex_Cover_Size
 				opt = round(time.time()-begin_time,2)
 				solTrace[round(time.time()-begin_time,2)] = UB
 				time_list.append((Current_Vertex_Cover_Size,time.time() - begin_time))
 			# As we completed one branch, we need to return or backtrack to previous nodes, to check for other solutions
 			backtrack = True
-			#print('First backtrack-vertex-',CN)
 
 		else:   
 			# We can still see other options at this node: Either further solution possible or it is a dead end
@@ -272,9 +224,6 @@ def Branch_And_Bound(filename,T):
 					# If both of the above cases fail, then there is an error and backtracking is not possible
 					print('There is an error and backtracking not possible')
 
-		
-		#finish_time = time.time()
-		#total_time = finish_time - begin_time
 		if time.time() > finish_time:
 			print('We have crossed our given time for running the algorithm, hence terminating here')
 
@@ -289,25 +238,8 @@ def Branch_And_Bound(filename,T):
 	str(MVC)
 	solTrace = list(solTrace.items())
 	solTrace.sort(key = lambda x:x[0], reverse=False)
-	#print(f"Optimal Vertex Cover size is: {UB} and is calculated in {opt} seconds. ")
+	#print("VC Generated")
 	return MVC, solTrace, solution
-
-
-
-def write_to_file(VC,filename,alg,maxtime,seed,solTrace):
-    fname = "results/"+filename+"_"+alg+"_"+str(maxtime)+"_"+str(seed)+".sol"
-    VC = list(map(str,VC))
-    with open(fname, "w") as f:
-        f.write(str(len(VC)) + "\n")
-        f.write(str(",".join(list(VC))))
-
-    
-    traceFile = "results/"+filename+"_"+alg+"_"+str(maxtime)+"_"+str(seed)+".trace"
-    with open(traceFile, "w") as f:
-        for trace in solTrace:
-            line = str(trace[0])+","+str(trace[1])+"\n"
-            f.write(line)
-
 
 		
 

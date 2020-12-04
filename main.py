@@ -11,13 +11,16 @@ from bnb import Branch_And_Bound
 
 if __name__=="__main__":
     '''
-    Sample command: python main.py -inst star2.graph -alg ls2 -time 600 -seed 10
-    Sample command approx: python main.py -inst power.graph -alg app -time 600 -seed 10
-    The implemented algorithms are Branch & Bound (bnb), Approximation (approx), Hill Climbing (ls1) and ...
+    Sample command for ls1: python main.py -inst star2.graph -alg ls1 -time 1000 -seed 10
+    Sample command for ls2: python main.py -inst star2.graph -alg ls2 -time 1000 -seed 10
+    Sample command approx: python main.py -inst power.graph -alg app -time 1000 -seed 10
+    Sample command for b&b: python main.py -inst power.graph -alg bnb -time 1000 -seed 10
+    
+    The implemented algorithms are Branch & Bound (bnb), Approximation (approx), Hill Climbing (ls1) and Simulated Annealing (ls2)
     '''
     parser = argparse.ArgumentParser(description='Different algorithms to compute the VC of a graph')
     parser.add_argument('-inst',action='store',type=str,required=True,help='Instance of graph')
-    parser.add_argument('-alg',action='store',type=str,required=True,help='Type of algorithm - (BnB,Approx,LS1 (Hill climbing),...)')
+    parser.add_argument('-alg',action='store',type=str,required=True,help='Type of algorithm - (BnB,Approx,LS1 (Hill climbing),LS2 (Simulated Annealing))')
     parser.add_argument('-time',action='store',default=600,type=int,required=True,help='Maximum runtime (s)')
     parser.add_argument('-seed',action='store',default=10,type=int,required=False,help='Random Seed')
     args=parser.parse_args()
