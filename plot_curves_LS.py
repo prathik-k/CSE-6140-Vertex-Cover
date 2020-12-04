@@ -46,7 +46,7 @@ def plot_qrtd(inst='power',maxtime=600,seeds=[10,20,30,40,50,60,70,80,90,100],me
     elif inst=="star2" and method=="LS2":
         xvals = [50,80,100,200]
     elif inst=="star2" and method=="LS1":
-        xvals = [450,470,500,550]
+        xvals = [350,400,420,500,550,600]
 
     for case in all_cases:
         for t in xvals:
