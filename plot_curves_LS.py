@@ -80,7 +80,7 @@ def plot_sqd(inst='power',maxtime=600,seeds=[10,20,30,40,50,60,70,80,90,100],met
         target_size = int(q*(100+perc)/100)
         target_sizes[perc] = target_size     
 
-    times = np.round(np.linspace(mt-100,mt,num=5),2)
+    times = np.round(np.linspace(2,mt,num=5),2)
     for case in all_cases:
         for t in times:
             case[t] = case.get(t, case[min(case.keys(), key=lambda k: abs(k-t))])
@@ -108,10 +108,10 @@ def plot_sqd(inst='power',maxtime=600,seeds=[10,20,30,40,50,60,70,80,90,100],met
 
 
 if __name__=="__main__":
-    plot_qrtd(inst="star2",method="LS1")
-    plot_qrtd(inst="star2",method="LS2")
-    plot_sqd(inst="power",method="LS1")
-    plot_sqd(inst="power",method="LS2")
+    plot_qrtd(inst="star2",maxtime=1000,method="LS1")
+    plot_qrtd(inst="star2",maxtime=1000,method="LS2")
+    plot_sqd(inst="power",maxtime=1000,method="LS1")
+    plot_sqd(inst="power",maxtime=1000,method="LS2")
     
 
 
