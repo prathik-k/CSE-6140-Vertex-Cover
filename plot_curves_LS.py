@@ -1,5 +1,6 @@
 import numpy as np
 import matplotlib.pyplot as plt 
+import seaborn as sns
 
 '''
 For the power.graph instance, the LS1 (hill climbing) algorithm yielded an average final result of 2279 for the VC size. Since the graph size is 4941, we have
@@ -127,8 +128,29 @@ def plot_sqd(inst='power',maxtime=600,seeds=[10,20,30,40,50,60,70,80,90,100],met
     plt.savefig("plots/"+inst+"_"+method+"_sqd.png")
     plt.clf()   
 
+def boxplot(method="LS1"):
+    if method == "LS2":
+        times_power = [155.69,162.48,46.4,224.78,90.85,144.36,72.55,332.59,107.27,98.15]
+        times_star2 = [867.91,979.96,817.77,645.83,971.04,951.52,912.34,911.66,715.7,988.03]
+        alt_name = "simulated annealing"
+    
+    elif method=="LS1":
+        times_power = [11.58,11.63,11.53,11.47,11.52,11.48,11.6,11.42,11.5,11.36]
+        times_star2 = [541.58,517.14,478.0,470.78,473.76,481.96,478.47,491.77,501.38,502.48]
+        alt_name = "hill-climbing"
 
+    all_time_data = [times_power,times_star2]
+    fig,ax = plt.subplots()
+    ax.set_title("Boxplot of running time for "+alt_name+" algorithm")
+    ax.boxplot(all_time_data,showfliers=False)
+    ax.set_ylabel("Runtime (s)")
+    ax.set_xticklabels(['power.graph', 'star2.graph'])
+    plt.savefig("plots/"+method+"_boxplot.png")
+    plt.clf() 
+    
 if __name__=="__main__":
+    boxplot("LS1")
+    boxplot("LS2")
     plot_qrtd(inst="star2",maxtime=1000,method="LS1")
     plot_qrtd(inst="star2",maxtime=1000,method="LS2")
     plot_qrtd(inst="power",maxtime=1000,method="LS2")
@@ -138,6 +160,8 @@ if __name__=="__main__":
     plot_sqd(inst="power",maxtime=1000,method="LS2")
     plot_sqd(inst="star2",maxtime=1000,method="LS1")
     plot_sqd(inst="star2",maxtime=1000,method="LS2")
+
+
     
 
 
