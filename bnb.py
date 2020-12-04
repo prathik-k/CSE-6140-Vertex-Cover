@@ -91,8 +91,6 @@ def Branch_And_Bound(filename,T):
 	finish_time = begin_time + T
 	solTrace = dict()
 
-	total_time = finish_time - begin_time
-	
 	# time_list when solution is found
 	time_list = []
 
@@ -166,24 +164,18 @@ def Branch_And_Bound(filename,T):
 			# We can still see other options at this node: Either further solution possible or it is a dead end
 			# We will update the current lower bound and check for these options
 			Current_LB = Lower_Bound(Current_Graph) + Current_Vertex_Cover_Size
-			#print(CurLB)
-			#CurLB=297
+
 
 			if Current_LB <= UB:  
 				# The current branch still has potential and we can check further
 				# We will attach one new node with two states to our CN. CN will be the parent 
 				new_node = max_degree(Current_Graph)
 				Frontier.append((new_node[0], 0, (CN, state)))
-				Frontier.append((new_node[0], 1, (CN, state)))
-				
-				# print('Frontier',Frontier)
+				Frontier.append((new_node[0], 1, (CN, state)))				
 			else:
 				# The current branch cannot give better solution then our current best and hence we backtrack from here
-				#if(solTrace.values() != Current_LB):
-				solTrace[round(time.time()-begin_time,2)] = Current_LB
-				
+				solTrace[round(time.time()-begin_time,2)] = Current_LB				
 				backtrack = True
-				#print('Second backtrack-vertex-',CN)
 
 
 		if backtrack == True:
