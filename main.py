@@ -6,7 +6,7 @@ from utils import write_to_file
 from LS1_hillclimb import hc
 from approx import approx_mvc
 from LS2_sann import main_ls2
-from bnb import Branch_And_Bound
+from Branch_And_Bound import bnb
 
 
 if __name__=="__main__":
@@ -42,6 +42,6 @@ if __name__=="__main__":
         write_to_file(VC,filename,"LS2",maxtime,seed,solTrace)
     
     elif alg.lower() == "bnb":
-        VC,solTrace,solution = Branch_And_Bound(filename,maxtime)
+        VC,solTrace,solution = bnb(filename,maxtime)
         print("VC generated")
         write_to_file(VC,filename,"BNB",maxtime,seed,solTrace)
