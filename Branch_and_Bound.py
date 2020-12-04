@@ -83,7 +83,7 @@ def Vertex_Cover_Size(list):
  *      Will give the the solution for Minimum Vertex Problem along with 
  '''
 
-def bnb(filename,T):
+def bnb(filename,T,seed):
 	# Noting the begin and finish time
 	G = createGraph("DATA/"+filename)
 
