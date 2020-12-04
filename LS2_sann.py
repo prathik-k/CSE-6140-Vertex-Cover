@@ -8,6 +8,7 @@ The output is two files: *.sol and *.trace created
 *.trace --- record all the optimum solution found during the search and the time it was found
 '''
 
+
 import networkx as nx
 from random import sample
 import random
@@ -15,6 +16,7 @@ import time
 import os
 import math
 from utils import *
+
 
 def initial_solution(G, input_file):
     temp_G = G.nodes()
