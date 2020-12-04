@@ -4,7 +4,7 @@ import argparse
 
 from utils import write_to_file
 from LS1_hillclimb import hc
-from mvc_approx_algos import approx_mvc
+from approx import approx_mvc
 from LS2_sann import main_ls2
 from bnb import Branch_And_Bound
 
