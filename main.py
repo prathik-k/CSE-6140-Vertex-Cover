@@ -18,6 +18,8 @@ if __name__=="__main__":
     
     The implemented algorithms are Branch & Bound (bnb), Approximation (approx), Hill Climbing (ls1) and Simulated Annealing (ls2)
 
+    The allowed graph instances are:
+    
     ['jazz.graph', 'karate.graph', 'football.graph','as-22july06.graph',
     'hep-th.graph','star.graph', 'star2.graph',
     'netscience.graph', 'email.graph', 'delaunay_n10.graph', 'power.graph','dummy1.graph','dummy2.graph']
