@@ -42,7 +42,7 @@ if __name__=="__main__":
         print("VC generated")
         write_to_file(VC,filename,"APP",maxtime,seed,solTrace)
         
-    elif alg.lower() == "ls2":
+    elif alg.lower() == "ls":
         VC,solTrace = main_ls2(filename,maxtime,seed)
         print("VC generated")
         write_to_file(VC,filename,"LS2",maxtime,seed,solTrace)
